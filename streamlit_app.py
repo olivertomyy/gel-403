@@ -4,6 +4,46 @@ import json
 import os
 import tempfile
 import io
+import pickle
+import time
+
+# Constants for session persistence
+SESSION_FILE = "exam_session.pkl"
+
+def save_session_state():
+    """Save critical session state to file for persistence"""
+    try:
+        session_data = {
+            'questions': st.session_state.get('questions', []),
+            'current_question': st.session_state.get('current_question', 0),
+            'score': st.session_state.get('score', 0),
+            'answered': st.session_state.get('answered', False),
+            'user_answers': st.session_state.get('user_answers', []),
+            'exam_completed': st.session_state.get('exam_completed', False),
+            'topics': st.session_state.get('topics', {}),
+            'questions_loaded': st.session_state.get('questions_loaded', False),
+            'last_uploaded_file_name': st.session_state.get('last_uploaded_file_name', None),
+            'session_timestamp': time.time()
+        }
+        
+        with open(SESSION_FILE, 'wb') as f:
+            pickle.dump(session_data, f)
+    except Exception as e:
+        print(f"Warning: Could not save session: {e}")
+
+def load_session_state():
+    """Load session state from file if it exists and is recent"""
+    try:
+        if os.path.exists(SESSION_FILE):
+            # Check if session file is recent (less than 24 hours old)
+            file_age = time.time() - os.path.getmtime(SESSION_FILE)
+            if file_age < 24 * 3600:  # 24 hours
+                with open(SESSION_FILE, 'rb') as f:
+                    session_data = pickle.load(f)
+                return session_data
+    except Exception as e:
+        print(f"Warning: Could not load session: {e}")
+    return None
 
 def load_questions_from_json():
     """Load questions from JSON file with the programming_languages_exam_questions structure"""
@@ -95,6 +135,20 @@ def get_fallback_exam_questions():
             "correct_answer": "C",
             "page": 2,
             "explanation": "Functional programming emphasizes immutable data and avoiding side effects."
+        },
+        {
+            "id": 3,
+            "topic": "Object-Oriented Programming",
+            "question": "What is encapsulation in OOP?",
+            "options": {
+                "A": "Hiding implementation details",
+                "B": "Creating multiple instances",
+                "C": "Inheriting properties",
+                "D": "Polymorphic behavior"
+            },
+            "correct_answer": "A",
+            "page": 3,
+            "explanation": "Encapsulation bundles data and methods while hiding internal implementation details."
         }
     ]
 
@@ -106,19 +160,27 @@ def analyze_exam_topics(questions):
         topics[topic] = topics.get(topic, 0) + 1
     return topics
 
-def initialize_exam_state(questions=None):
+def initialize_exam_state(questions=None, restore_progress=False):
     """Initialize or reset the exam state"""
     if questions is None:
         questions = load_questions_from_json()
     
-    st.session_state.questions = questions
-    st.session_state.current_question = 0
-    st.session_state.score = 0
-    st.session_state.answered = False
-    st.session_state.user_answers = [None] * len(questions)
-    st.session_state.exam_completed = False
-    st.session_state.topics = analyze_exam_topics(questions)
-    st.session_state.questions_loaded = True
+    if restore_progress and st.session_state.get('questions_loaded', False):
+        # Keep existing progress
+        st.info("🔄 Restored your exam progress")
+    else:
+        # Reset progress
+        st.session_state.questions = questions
+        st.session_state.current_question = 0
+        st.session_state.score = 0
+        st.session_state.answered = False
+        st.session_state.user_answers = [None] * len(questions)
+        st.session_state.exam_completed = False
+        st.session_state.topics = analyze_exam_topics(questions)
+        st.session_state.questions_loaded = True
+    
+    # Save session after initialization
+    save_session_state()
 
 def parse_uploaded_json(uploaded_file):
     """Parse uploaded JSON file and extract questions"""
@@ -174,16 +236,27 @@ def main():
         initial_sidebar_state="expanded"
     )
 
-    # Initialize session state
+    # Try to load existing session first
     if 'questions_loaded' not in st.session_state:
-        initialize_exam_state()
+        saved_session = load_session_state()
+        if saved_session:
+            # Restore from saved session
+            for key, value in saved_session.items():
+                st.session_state[key] = value
+            st.success("🔁 Restored your previous exam session!")
+        else:
+            # Initialize fresh session
+            initialize_exam_state()
     
     # Header
-    st.title("💻Exam")
-    st.markdown("### Upload your own JSON question file or use the built-in questions")
+    st.title("💻 Exam - Persistent Session")
+    st.markdown("### Your progress is automatically saved! Leave and return anytime.")
     
-    # File Upload Section - PROMINENTLY DISPLAYED
-    with st.expander("📁 Upload Your JSON Question File", expanded=True):
+    # Auto-save notice
+    st.info("💾 **Auto-save enabled**: Your progress is automatically saved and will be restored when you return.")
+    
+    # File Upload Section
+    with st.expander("📁 Upload Your JSON Question File", expanded=False):
         st.markdown("""
         **Upload your JSON file with questions in this format:**
         ```json
@@ -205,10 +278,6 @@ def main():
           ]
         }
         ```
-        
-        **Alternative formats also supported:**
-        - Direct array of questions
-        - Any key containing an array of questions with 'question', 'options', and 'correct_answer' fields
         """)
         
         uploaded_file = st.file_uploader(
@@ -219,15 +288,24 @@ def main():
         )
         
         # AUTO-LOAD when file is uploaded
-        if uploaded_file is not None and uploaded_file != st.session_state.get('last_uploaded_file'):
+        if uploaded_file is not None:
             # Parse the uploaded file
             questions = parse_uploaded_json(uploaded_file)
             
             if questions:
-                # Auto-load the questions
-                initialize_exam_state(questions)
-                st.session_state.last_uploaded_file = uploaded_file
-                st.success(f"✅ Automatically loaded {len(questions)} questions from uploaded file!")
+                # Store file info for persistence
+                st.session_state.last_uploaded_file_name = uploaded_file.name
+                
+                # Initialize with new questions but preserve progress if compatible
+                current_questions = st.session_state.get('questions', [])
+                if len(current_questions) == len(questions):
+                    st.info("📚 Questions updated while preserving your progress!")
+                    st.session_state.questions = questions
+                else:
+                    st.warning("🔄 Question set changed - resetting progress")
+                    initialize_exam_state(questions)
+                
+                save_session_state()
                 st.rerun()
         
         # Manual controls for uploaded file
@@ -253,7 +331,7 @@ def main():
         json_text = st.text_area(
             "Paste your JSON here:",
             height=200,
-            placeholder='Paste your JSON questions here...\n\nExample:\n{\n  "questions": [\n    {\n      "question": "Your question?",\n      "options": {"A": "Option A", "B": "Option B", "C": "Option C", "D": "Option D"},\n      "correct_answer": "A",\n      "explanation": "Your explanation"\n    }\n  ]\n}',
+            placeholder='Paste your JSON questions here...',
             key="json_text_area"
         )
         
@@ -275,7 +353,7 @@ def main():
                 st.warning("Please paste some JSON text first.")
     
     # Show warning if no questions
-    if not st.session_state.questions:
+    if not st.session_state.get('questions'):
         st.error("❌ No exam questions available.")
         return
     
@@ -288,18 +366,25 @@ def main():
         st.metric("Topics Covered", len(st.session_state.topics))
     with col3:
         if not st.session_state.exam_completed:
-            current_attempted = st.session_state.current_question + 1 if st.session_state.current_question > 0 else 0
+            current_attempted = sum(1 for ans in st.session_state.user_answers if ans is not None)
             st.metric("Current Score", f"{st.session_state.score}/{current_attempted}")
         else:
             st.metric("Final Score", f"{st.session_state.score}/{len(st.session_state.questions)}")
     with col4:
-        if st.button("🔄 Reset to Built-in Questions"):
-            initialize_exam_state()
+        if st.button("🔄 Reset Exam", help="Start over with current questions"):
+            initialize_exam_state(st.session_state.questions)
             st.rerun()
     
+    # Progress persistence info
+    answered_count = sum(1 for ans in st.session_state.user_answers if ans is not None)
+    st.write(f"**Progress:** {answered_count}/{len(st.session_state.questions)} questions answered • **Auto-saved**")
+    
     # Source indicator
-    current_source = "📁 Uploaded File" if st.session_state.get('last_uploaded_file') else "📝 Built-in Questions"
-    st.write(f"**Current question source:** {current_source}")
+    if st.session_state.get('last_uploaded_file_name'):
+        current_source = f"📁 {st.session_state.last_uploaded_file_name}"
+    else:
+        current_source = "📝 Built-in Questions"
+    st.write(f"**Question source:** {current_source}")
     
     # Sidebar for exam progress and info
     with st.sidebar:
@@ -307,20 +392,31 @@ def main():
         
         current_score = st.session_state.score
         total_questions = len(st.session_state.questions)
+        answered_count = sum(1 for ans in st.session_state.user_answers if ans is not None)
         
         if not st.session_state.exam_completed:
-            questions_attempted = st.session_state.current_question + 1
-            progress = questions_attempted / total_questions
-            score_percentage = (current_score / questions_attempted) * 100 if questions_attempted > 0 else 0
+            progress = answered_count / total_questions
+            score_percentage = (current_score / answered_count) * 100 if answered_count > 0 else 0
         else:
-            questions_attempted = total_questions
             progress = 1.0
             score_percentage = (current_score / total_questions) * 100
         
-        st.write(f"**Score:** {current_score}/{questions_attempted}")
+        st.write(f"**Score:** {current_score}/{answered_count}")
         st.write(f"**Accuracy:** {score_percentage:.1f}%")
         st.progress(progress)
-        st.write(f"**Progress:** {questions_attempted}/{total_questions}")
+        st.write(f"**Progress:** {answered_count}/{total_questions}")
+        
+        # Session management
+        st.header("💾 Session")
+        if st.button("💾 Save Progress Now", use_container_width=True):
+            save_session_state()
+            st.success("Progress saved!")
+        
+        if st.button("🗑️ Clear Saved Session", use_container_width=True):
+            if os.path.exists(SESSION_FILE):
+                os.remove(SESSION_FILE)
+            st.success("Saved session cleared!")
+            st.rerun()
         
         # Exam controls
         st.header("🎯 Exam Controls")
@@ -332,6 +428,7 @@ def main():
             random.shuffle(st.session_state.questions)
             st.session_state.current_question = 0
             st.session_state.answered = False
+            save_session_state()
             st.success("Questions shuffled!")
             st.rerun()
         
@@ -356,24 +453,31 @@ def main():
         if not st.session_state.answered:
             # Display options for answering
             option_labels = list(current_q['options'].keys())
+            
+            # Pre-select if already answered
+            previous_answer = st.session_state.user_answers[st.session_state.current_question]
             user_answer = st.radio(
                 "Select your answer:",
                 option_labels,
+                index=option_labels.index(previous_answer) if previous_answer in option_labels else 0,
                 format_func=lambda x: f"{x}. {current_q['options'][x]}",
                 key=f"q{st.session_state.current_question}"
             )
             
             # Submit button
-            if st.button("🚀 Submit Answer", type="primary"):
-                st.session_state.answered = True
-                st.session_state.user_answers[st.session_state.current_question] = user_answer
-                
-                # Check if answer is correct
-                if user_answer == current_q['correct_answer']:
-                    st.session_state.score += 1
-                
-                # Rerun to show results and explanation
-                st.rerun()
+            col1, col2 = st.columns([1, 4])
+            with col1:
+                if st.button("🚀 Submit Answer", type="primary"):
+                    st.session_state.answered = True
+                    st.session_state.user_answers[st.session_state.current_question] = user_answer
+                    
+                    # Check if answer is correct
+                    if user_answer == current_q['correct_answer']:
+                        st.session_state.score += 1
+                    
+                    # Auto-save after answering
+                    save_session_state()
+                    st.rerun()
         
         else:
             # AFTER ANSWERING - SHOW RESULTS AND EXPLANATION
@@ -415,6 +519,7 @@ def main():
                     if st.button("⏮️ Previous Question", use_container_width=True):
                         st.session_state.current_question -= 1
                         st.session_state.answered = False
+                        save_session_state()
                         st.rerun()
             
             with col2:
@@ -422,15 +527,18 @@ def main():
                     if st.button("⏭️ Next Question", type="primary", use_container_width=True):
                         st.session_state.current_question += 1
                         st.session_state.answered = False
+                        save_session_state()
                         st.rerun()
                 else:
                     if st.button("🏁 Finish Exam", type="primary", use_container_width=True):
                         st.session_state.exam_completed = True
+                        save_session_state()
                         st.rerun()
             
             with col3:
                 if st.button("🔄 Try Again", use_container_width=True):
                     st.session_state.answered = False
+                    save_session_state()
                     st.rerun()
     
     else:
@@ -465,32 +573,6 @@ def main():
             st.warning("### 📚 Good! Review Challenging Topics!")
         else:
             st.error("### 💪 Keep Studying! Focus on Fundamental Concepts!")
-        
-        # Detailed answer review with explanations
-        st.subheader("🔍 Detailed Answer Review")
-        for i, question in enumerate(st.session_state.questions):
-            with st.expander(f"Question {i+1}: {question['question'][:80]}...", expanded=False):
-                user_ans = st.session_state.user_answers[i]
-                correct_ans = question['correct_answer']
-                
-                # Show question details
-                st.write(f"**Topic:** {question.get('topic', 'General')}")
-                if 'page' in question:
-                    st.write(f"**Reference:** Page {question['page']}")
-                
-                # Show user's answer vs correct answer
-                st.write(f"**Your answer:** {user_ans}. {question['options'][user_ans] if user_ans else 'Not answered'}")
-                st.write(f"**Correct answer:** {correct_ans}. {question['options'][correct_ans]}")
-                
-                # Show explanation
-                if 'explanation' in question and question['explanation']:
-                    st.info(f"**Explanation:** {question['explanation']}")
-                
-                # Show result
-                if user_ans == correct_ans:
-                    st.success("✅ You answered this correctly!")
-                else:
-                    st.error("❌ You answered this incorrectly.")
         
         # Restart option
         st.write("---")
