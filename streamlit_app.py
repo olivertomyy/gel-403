@@ -261,21 +261,530 @@ def main():
         **Upload your JSON file with questions in this format:**
         ```json
         {
-          "programming_languages_exam_questions": [
-            {
-              "id": 1,
-              "topic": "Your Topic",
-              "question": "Your question?",
-              "options": {
-                "A": "Option A",
-                "B": "Option B",
-                "C": "Option C",
-                "D": "Option D"
-              },
-              "correct_answer": "A",
-              "explanation": "Your explanation here"
-            }
-          ]
+          {
+"questions": [
+{
+"id": 1,
+"topic": "Work Readiness",
+"question": "According to the text, what is no longer sufficient to differentiate a candidate from other bright sparks in the job market?",
+"options": {
+"A": "Work experience",
+"B": "A university degree",
+"C": "Soft skills",
+"D": "Networking connections"
+},
+"correct_answer": "B",
+"explanation": "Page 1 states: 'Having a degree, while incredibly important and rewarding, is no longer sufficient to differentiate you from all the other bright sparks trying to enter the job market.'"
+},
+{
+"id": 2,
+"topic": "Work Readiness",
+"question": "What types of jobs are now being filled by graduates, despite not requiring a university qualification?",
+"options": {
+"A": "Engineering and medical roles",
+"B": "Bank clerks, police officers, and shop managers",
+"C": "Senior executive positions",
+"D": "IT specialists and developers"
+},
+"correct_answer": "B",
+"explanation": "Page 1 mentions: 'jobs that don’t even require a university qualification (bank clerks, police officers, restaurant and shop managers) are now being filled by graduates.'"
+},
+{
+"id": 3,
+"topic": "Work Readiness",
+"question": "Work readiness refers to which of the following expected by employers?",
+"options": {
+"A": "High GPA and academic awards",
+"B": "Skills, aptitudes, and attitudes",
+"C": "Financial stability and dress code",
+"D": "Previous management experience"
+},
+"correct_answer": "B",
+"explanation": "Page 1 defines Work Readiness as: 'Refers to the skills, aptitudes, and attitudes employers expect job seekers to have in preparation for the culture and demands of the workplace.'"
+},
+{
+"id": 4,
+"topic": "Self Awareness",
+"question": "According to the text, what is the 'ticket to a shining career'?",
+"options": {
+"A": "Being flawless in an interview",
+"B": "Having a First Class degree",
+"C": "Being aware of both your strengths and weaknesses",
+"D": "Hiding your faults from the employer"
+},
+"correct_answer": "C",
+"explanation": "Page 1 states: 'The ticket to a shining career is being aware of both your strengths and weaknesses.'"
+},
+{
+"id": 5,
+"topic": "Personal Branding",
+"question": "What does a strong personal brand help a hiring manager decide?",
+"options": {
+"A": "How much to pay you",
+"B": "How suitable you will be for a role",
+"C": "Where you live",
+"D": "Your academic history"
+},
+"correct_answer": "B",
+"explanation": "Page 2 states: 'The stronger your personal brand, the easier it is for someone hiring you to decide how suitable you’ll be for a role.'"
+},
+{
+"id": 6,
+"topic": "Soft Skills",
+"question": "Why might an employer hire a graduate with a 2:1 over someone with a First?",
+"options": {
+"A": "They are cheaper to hire",
+"B": "They have better technical knowledge",
+"C": "They possess the right soft skills and attributes",
+"D": "They have more academic references"
+},
+"correct_answer": "C",
+"explanation": "Page 2 explains: 'In some jobs, an employer would rather hire a graduate with a 2:1 over someone with a First if they have the right skills and attributes... because it’s easier to train someone in the technical aspects... than train them to acquire communication... capabilities.'"
+},
+{
+"id": 7,
+"topic": "Problem Solving",
+"question": "What does the 'I' in the IDEAL problem-solving framework stand for?",
+"options": {
+"A": "Initiate the plan",
+"B": "Identify the problem",
+"C": "Investigate the cause",
+"D": "Imagine the solution"
+},
+"correct_answer": "B",
+"explanation": "Page 2 lists the IDEAL framework where I stands for: 'Identify the problem'."
+},
+{
+"id": 8,
+"topic": "Job Search Strategies",
+"question": "What percentage of job seekers rely on applying online, and what is the approximate yield rate?",
+"options": {
+"A": "50% rely on it; 10% yield",
+"B": "90% rely on it; less than 3% yield",
+"C": "75% rely on it; 20% yield",
+"D": "30% rely on it; 50% yield"
+},
+"correct_answer": "B",
+"explanation": "Page 3 states: 'Over 90% of the job seekers rely on this strategy only, yet it yields less than a 3% chance of getting an interview.'"
+},
+{
+"id": 9,
+"topic": "Job Search Strategies",
+"question": "How much more likely are job seekers to get a job offer through a referral?",
+"options": {
+"A": "Two times more likely",
+"B": "Three times more likely",
+"C": "Five times more likely",
+"D": "Ten times more likely"
+},
+"correct_answer": "C",
+"explanation": "Page 3 states: 'Studies also show that job seekers are five times more likely to get a job offer through a job referral.'"
+},
+{
+"id": 10,
+"topic": "Networking",
+"question": "When connecting with executive or agency recruiters, who do they work for?",
+"options": {
+"A": "They work for the job seeker",
+"B": "They work for the government",
+"C": "They work for themselves only",
+"D": "They work for the employers"
+},
+"correct_answer": "D",
+"explanation": "Page 3 states: 'Keep in mind that recruiters don't work for you, they work for the employers.'"
+},
+{
+"id": 11,
+"topic": "Networking",
+"question": "Why are management level executives considered 'influencers' or 'decision-makers'?",
+"options": {
+"A": "They have large social media followings",
+"B": "They are the ones who identify that they need to hire people",
+"C": "They control the company budget",
+"D": "They interview every candidate personally"
+},
+"correct_answer": "B",
+"explanation": "Page 4 states: 'Management level executives are the people whom I consider as influencers or decision-makers because they are the ones who identify that they need to hire people.'"
+},
+{
+"id": 12,
+"topic": "Networking",
+"question": "What type of conversation should you start with an executive to stand out?",
+"options": {
+"A": "A pitch about your resume",
+"B": "A request for a job immediately",
+"C": "A consultative conversation to understand business needs",
+"D": "A conversation about salary expectations"
+},
+"correct_answer": "C",
+"explanation": "Page 4 suggests: 'take a consultative approach where you start a conversation to understand business needs and challenges.'"
+},
+{
+"id": 13,
+"topic": "Job Search Strategies",
+"question": "According to SHRM, by what percentage does a referral increase your chances of landing a job?",
+"options": {
+"A": "25%",
+"B": "30%",
+"C": "45%",
+"D": "60%"
+},
+"correct_answer": "C",
+"explanation": "Page 5 states: 'According to the Society of Human Resources Management, getting a referral increases your chances of landing the job by 45%.'"
+},
+{
+"id": 14,
+"topic": "LinkedIn Strategies",
+"question": "How should you write the 'About' section on LinkedIn?",
+"options": {
+"A": "In the third person (e.g., 'He is...')",
+"B": "In the first person (using 'I')",
+"C": "As a bulleted list only",
+"D": "Leaving it blank"
+},
+"correct_answer": "B",
+"explanation": "Page 5 advises: 'write in first person, which means use “I” throughout this section.'"
+},
+{
+"id": 15,
+"topic": "Job Search Tactics",
+"question": "Why is the 'shotgun approach' to applying for jobs described as never effective?",
+"options": {
+"A": "It focuses too much on one company",
+"B": "It involves applying for anything and everything",
+"C": "It requires too many cover letters",
+"D": "It is too expensive"
+},
+"correct_answer": "B",
+"explanation": "Page 5 states: 'The shotgun approach where you apply for anything and everything is never effective.'"
+},
+{
+"id": 16,
+"topic": "Networking Maintenance",
+"question": "What is the recommended frequency for having a conversation with potential people from your network?",
+"options": {
+"A": "Once a month",
+"B": "At least one conversation a week",
+"C": "Every day",
+"D": "Only when you need a job"
+},
+"correct_answer": "B",
+"explanation": "Page 6 recommends: 'Make your list of potential people to call and have at least one conversation a week.'"
+},
+{
+"id": 17,
+"topic": "References",
+"question": "How many references should you line up?",
+"options": {
+"A": "One or two",
+"B": "Three to five",
+"C": "Five to ten",
+"D": "Just one family member"
+},
+"correct_answer": "B",
+"explanation": "Page 6 states: 'You need three to five references.'"
+},
+{
+"id": 18,
+"topic": "Job Search Tactics",
+"question": "When contacting a department head directly, what should you NOT include in your initial message?",
+"options": {
+"A": "Your phone number",
+"B": "Your accomplishments",
+"C": "A resume",
+"D": "Interest in the company"
+},
+"correct_answer": "C",
+"explanation": "Page 6 explicitly states: 'Do not include a resume. A personal conversation is what you are after.'"
+},
+{
+"id": 19,
+"topic": "CV Basics",
+"question": "What does 'Curriculum Vitae' translate to from Latin?",
+"options": {
+"A": "Work History",
+"B": "Course of Life",
+"C": "Skills and Abilities",
+"D": "Professional Summary"
+},
+"correct_answer": "B",
+"explanation": "Page 7 states: 'CV stands for Curriculum Vitae (latin for: course of life).'"
+},
+{
+"id": 20,
+"topic": "CV Formatting",
+"question": "What is the recommended font size for the body text of a CV?",
+"options": {
+"A": "9 to 10 pt",
+"B": "11 to 12 pt",
+"C": "14 to 16 pt",
+"D": "18 pt"
+},
+"correct_answer": "B",
+"explanation": "Page 7 advises: 'Use 11 to 12 pt font size and single spacing.'"
+},
+{
+"id": 21,
+"topic": "CV Content",
+"question": "What is the difference between a CV Objective and a CV Summary?",
+"options": {
+"A": "Objectives are for executives; Summaries are for students",
+"B": "Objectives are longer than Summaries",
+"C": "Objectives show skills and fit (good for little experience); Summaries highlight career progress",
+"D": "There is no difference"
+},
+"correct_answer": "C",
+"explanation": "Page 8 explains: 'a CV objective shows what skills you’ve mastered and how you’d fit in... A CV summary, in turn, highlights your career progress and achievements.'"
+},
+{
+"id": 22,
+"topic": "CV Writing",
+"question": "Which of the following is an example of an 'action verb' recommended for a CV?",
+"options": {
+"A": "Responsible for",
+"B": "Implemented",
+"C": "Hardworking",
+"D": "Duties included"
+},
+"correct_answer": "B",
+"explanation": "Page 8 lists action verbs: 'created,' 'analysed,' 'implemented,' not 'responsible for creating...'"
+},
+{
+"id": 23,
+"topic": "CV Ethics",
+"question": "What is a potential consequence of altering your degree grade on a CV (e.g., from 2:2 to 2:1)?",
+"options": {
+"A": "A simple warning",
+"B": "Degree fraud and a prison sentence",
+"C": "Demotion",
+"D": "A mandatory training course"
+},
+"correct_answer": "B",
+"explanation": "Page 9 states: 'altering your degree grade from a 2:2 to 2:1 is classed as degree fraud and can result in a prison sentence.'"
+},
+{
+"id": 24,
+"topic": "Hard Skills",
+"question": "Which of the following is considered a 'Hard Skill'?",
+"options": {
+"A": "Teamwork",
+"B": "Empathy",
+"C": "Data Analysis",
+"D": "Conflict Management"
+},
+"correct_answer": "C",
+"explanation": "Page 10 lists 'Data analysis' under Hard skills to include on a CV."
+},
+{
+"id": 25,
+"topic": "Soft Skills",
+"question": "How are soft skills defined in the text?",
+"options": {
+"A": "Job-specific abilities learned through school",
+"B": "Technical skills needed for a specific job",
+"C": "Innate character traits that positively impact interaction with others",
+"D": "Skills that are difficult to learn"
+},
+"correct_answer": "C",
+"explanation": "Page 10 defines Soft skills as: 'innate character traits that positively impact how you work or interact with other people'."
+},
+{
+"id": 26,
+"topic": "Interview Goals",
+"question": "According to research mentioned in the text, how quickly does an interviewer decide to hire on average?",
+"options": {
+"A": "In the first 30 seconds",
+"B": "In just 5 minutes",
+"C": "After the second interview",
+"D": "After checking references"
+},
+"correct_answer": "B",
+"explanation": "Page 12 states: 'Research indicates that, on average, an interviewer decides to hire in just 5 minutes.'"
+},
+{
+"id": 27,
+"topic": "Interview Preparation",
+"question": "Which of the following is NOT one of the 7 key competencies employers look for?",
+"options": {
+"A": "Critical Thinking",
+"B": "Physical Strength",
+"C": "Teamwork/Collaboration",
+"D": "Professionalism/Work Ethic"
+},
+"correct_answer": "B",
+"explanation": "Page 12 lists the 7 key competencies, which include Critical Thinking, Teamwork, Leadership, etc., but not Physical Strength."
+},
+{
+"id": 28,
+"topic": "Interview Etiquette",
+"question": "How early should you arrive for an interview?",
+"options": {
+"A": "30 minutes early",
+"B": "Right on time",
+"C": "10 minutes early",
+"D": "1 hour early"
+},
+"correct_answer": "C",
+"explanation": "Page 13 advises: 'Arrive 10 minutes early to allow yourself time to park and collect your thoughts.'"
+},
+{
+"id": 29,
+"topic": "Interview Types",
+"question": "In a 'Traditional' interview, what is the typical speaking ratio?",
+"options": {
+"A": "Interviewer speaks 75%, Interviewee speaks 25%",
+"B": "Interviewer speaks 50%, Interviewee speaks 50%",
+"C": "Interviewer speaks 25%, Interviewee speaks 75%",
+"D": "It is entirely a monologue by the candidate"
+},
+"correct_answer": "C",
+"explanation": "Page 13 describes Traditional interviews: 'The interviewer typically asks questions and speaks about 25% of the time and the interviewee... speaks 75% of the time.'"
+},
+{
+"id": 30,
+"topic": "First Impressions",
+"question": "How long does it take to form a first impression?",
+"options": {
+"A": "Thirty seconds",
+"B": "Two minutes",
+"C": "Ten minutes",
+"D": "One hour"
+},
+"correct_answer": "A",
+"explanation": "Page 14 states: 'First impressions take only thirty seconds.'"
+},
+{
+"id": 31,
+"topic": "Interview Tricks",
+"question": "What is the '30 second – 2 minute rule' used for?",
+"options": {
+"A": "The time you have to read the job description",
+"B": "The duration of your handshake",
+"C": "Providing a concise but thorough answer",
+"D": "The time you should wait before sitting down"
+},
+"correct_answer": "C",
+"explanation": "Page 14 advises: 'Follow the 30 second – 2 minute rule so that you provide a concise but thorough answer.'"
+},
+{
+"id": 32,
+"topic": "Interview Questions",
+"question": "When answering 'What are your weaknesses?', what should you include?",
+"options": {
+"A": "A list of all your faults",
+"B": "A claim that you are a perfectionist",
+"C": "An explanation of one area of improvement and how you are working on it",
+"D": "A refusal to answer the question"
+},
+"correct_answer": "C",
+"explanation": "Page 15 suggests: 'For your weakness, provide an explanation of one area of improvement... addressing how you are working to improve on this area.'"
+},
+{
+"id": 33,
+"topic": "Behavioral Interviews",
+"question": "What technique should be used to answer behavioral interview questions?",
+"options": {
+"A": "STAR or CAR technique",
+"B": "IDEAL framework",
+"C": "SWOT analysis",
+"D": "Yes/No answers"
+},
+"correct_answer": "A",
+"explanation": "Page 16 states: 'Strong responses to behavioral interview questions use the STAR or “CAR” technique below.'"
+},
+{
+"id": 34,
+"topic": "Public Speaking",
+"question": "Which of the following is NOT one of the five basic elements of a public speech mentioned in the figure?",
+"options": {
+"A": "Who?",
+"B": "When?",
+"C": "Whom?",
+"D": "Medium?"
+},
+"correct_answer": "B",
+"explanation": "Page 17 lists the elements in the figure: 'Who?', 'What?', 'Whom?', 'Medium?', 'Effect?'. 'When?' is not listed."
+},
+{
+"id": 35,
+"topic": "Public Speaking Strategies",
+"question": "What is a suggested way to improve speaking skills dramatically after recording a presentation?",
+"options": {
+"A": "Deleting the video immediately",
+"B": "Watching yourself later and working on areas that did not go well",
+"C": "Sending it to a professional editor",
+"D": "Only listening to the audio"
+},
+"correct_answer": "B",
+"explanation": "Page 17 states: 'You can improve your speaking skills dramatically by watching yourself later, and then working on improving in areas that did not go well.'"
+},
+{
+"id": 36,
+"topic": "Speech Preparation",
+"question": "Which step of eloquent speech preparation involves the creation of the structure of a coherent argument?",
+"options": {
+"A": "Invention",
+"B": "Arrangement",
+"C": "Style",
+"D": "Memory"
+},
+"correct_answer": "B",
+"explanation": "Page 18 defines Arrangement as: 'creation of the structure of a coherent argument'."
+},
+{
+"id": 37,
+"topic": "Conquering Nerves",
+"question": "What is a 'great tip' mentioned to build rapport and reduce nerves before speaking?",
+"options": {
+"A": "Hide in the bathroom until the last minute",
+"B": "Greet audience members at the door and do a quick survey",
+"C": "Drink a lot of coffee",
+"D": "Read your notes continuously"
+},
+"correct_answer": "B",
+"explanation": "Page 18 advises: 'A great tip is to greet audience members at the door and do a quick survey of why they are there...'"
+},
+{
+"id": 38,
+"topic": "Presentation Delivery",
+"question": "Why should you avoid memorizing your speech word-for-word?",
+"options": {
+"A": "It takes too long",
+"B": "It makes your delivery sound like a robot and increases nervousness if you miss a word",
+"C": "The audience prefers reading slides",
+"D": "It is illegal"
+},
+"correct_answer": "B",
+"explanation": "Page 19 states: 'all this does is make your delivery sound like it is coming from a robot. If you miss a word... your whole presentation is thrown off'."
+},
+{
+"id": 39,
+"topic": "Calming Nerves",
+"question": "How does deep breathing help with public speaking nerves?",
+"options": {
+"A": "It makes you louder",
+"B": "It tricks your body into believing you are calmer by slowing the pace",
+"C": "It helps you memorize lines",
+"D": "It stops you from sweating"
+},
+"correct_answer": "B",
+"explanation": "Page 19 explains: 'the slower pace will trick your body into believing you are calmer.'"
+},
+{
+"id": 40,
+"topic": "Presentation Tips",
+"question": "According to the 'Ten Tips' on the final page, what kind of slides should you use?",
+"options": {
+"A": "White slides",
+"B": "Black slides",
+"C": "Rainbow slides",
+"D": "Text-heavy slides"
+},
+"correct_answer": "B",
+"explanation": "Page 20 lists Tip 9 as: 'Use black slides'."
+}
+]
+}
         }
         ```
         """)
@@ -564,7 +1073,7 @@ def main():
         # Performance message
         st.write("---")
         if score_percentage >= 90:
-            st.success("### 🏆 Outstanding! Programming Languages Expert!")
+            st.success("### 🏆 Outstanding! Exams Genius!")
         elif score_percentage >= 80:
             st.success("### 🌟 Excellent! Strong Understanding of Concepts!")
         elif score_percentage >= 70:
